@@ -50,7 +50,7 @@ This code has been developed in the context of the Yardstick OPNFV project (http
    The host Linux machine needs to have the tool "perf" installed. It is available from Linux kernel version 2.6.31.
    In Ubuntu Linux, perf can be simply installed by running commands: 
    	  #+BEGIN_EXAMPLE
-      sudo apt-get install linux-tools
+      sudo apt-get install linux-tools-common
 
       sudo apt-get install linux-tools-`uname -r`
       #+END_EXAMPLE
