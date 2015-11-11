@@ -1,0 +1,180 @@
+#    -*- mode: org; org-export-html-validation-link: nil; -*-
+#+OPTIONS: ^:{}
+
+Performance monitor for KVM
+
+#+BEGIN_EXAMPLE
+Developed by Shaoteng Liu and Rebecca Steinert
+Network Intelligence group
+Decisions, Networks and Analytics laboratory
+SICS Swedish ICT 
+SE-164 29 Kista, Sweden 
+E-mail: {shaoteng, rebste}@sics.se
+
+Acknowledgement:
+This code has been developed in the context of the Yardstick OPNFV project (https://wiki.opnfv.org/yardstick).
+
+#+END_EXAMPLE
+
+* Introduction
+
+  This document is a brief description of a tool for monitoring the performance 
+  of a KVM virtual machine. We name this tool as perf-kvm. The main property of this 
+  tool is that it can monitor both hardware events as well as software events of a
+  specific KVM-based virtual machine. 
+
+
+  The perf-kvm is consists of two parts:
+
+  1. A server which needs to run on the host Linux machine. The python files for the server is in the folder "./server"
+
+  2. A guest-client which needs to run in a guest KVM virtual machine requesting monitoring. The python files for the client is in the folder "./guest-client"
+
+  
+  The server builds a dictionary for each VM running on the host machine, which contains information such as Name, MAC,  PID and PIDs of the vCPUs of a VM. Guest VMs can issue performance monitoring requests to the server through a client software. The server will configure the tool “perf” to monitor the hardware performance of the requesting VM. Then, the server will send the performance data back to the requesting VM.
+
+
+* Dependencies of the perf-kvm code
+
+** Linux
+
+   The monitor has been developed and thoroughly tested for Ubuntu 14.04, kernel version 3.16.0 and 3.19.0, but it will probably work on the latest Linux versions and distributions. 
+
+** Python version
+
+   The monitor runs in Python 2.7.
+
+   The user must change the first line in the files server.py and guest_client.py if the path to your default Python installation does not match the one specified.
+
+** Linux tool dependent
+   The host Linux machine needs to have the tool "perf" installed. It is available from Linux kernel version 2.6.31.
+   In Ubuntu Linux, perf can be simply installed by running commands: 
+   	  #+BEGIN_EXAMPLE
+      sudo apt-get install linux-tools
+
+      sudo apt-get install linux-tools-`uname -r`
+      #+END_EXAMPLE
+
+   In Redhat Linux, users can install it by using
+
+   	  #+BEGIN_EXAMPLE
+      sudo yum install perf 
+      #+END_EXAMPLE
+
+   User can also build perf from the source code contained in
+   	  #+BEGIN_EXAMPLE
+      /usr/src/linux-{kernel version}/tools/perf
+      #+END_EXAMPLE
+
+
+
+* Known limitations
+
+  1. perf-kvm only monitors the whole performance of a VM. It can not monitor a specific process inside a VM. 
+
+  2. The VMs running on the host machine should be managed by libvirt.
+
+
+
+* Performance events can be monitored
+  
+  #+BEGIN_EXAMPLE
+  cpu-cycles                                         [Hardware event]
+  instructions                                       [Hardware event]
+  cache-references                                   [Hardware event]
+  cache-misses                                       [Hardware event]
+  branches                                           [Hardware event]
+  branch-misses                                      [Hardware event]
+  bus-cycles                                         [Hardware event]
+  ref-cycles                                         [Hardware event]
+
+  cpu-clock                                          [Software event]
+  task-clock                                         [Software event]
+  page-faults                                        [Software event]
+  context-switches                                   [Software event]
+  minor-faults                                       [Software event]
+  major-faults                                       [Software event]
+  alignment-faults                                   [Software event]
+  emulation-faults                                   [Software event]
+  dummy                                              [Software event]
+  #+END_EXAMPLE
+
+
+
+* Start the server
+  
+  Simply start server.py from a shell on the host machine with 
+  #+BEGIN_EXAMPLE
+  sudo ./server.py
+  #+END_EXAMPLE
+
+** Configure the server
+
+  #+BEGIN_EXAMPLE
+   --host    IP of the host machine running the server. Default is 192.168.122.1
+   --port    Port of the host machine running the server. Default is 9999.
+   #+END_EXAMPLE
+
+* Run the guest-client to monitor a VM
+
+  A simple example is 
+  #+BEGIN_EXAMPLE
+  ./guest-client.py -p "sleep 5"
+  #+END_EXAMPLE
+  In this example, a program "sleep 5" runs in the VM. When the program starts, performance
+  monitoring begins. When the program ends, performance monitoring stops and a report is 
+  displayed in the VM. If the user wants real-time performance data, add " -i option", for example:
+  #+BEGIN_EXAMPLE
+  ./guest-client.py -p "sleep 5" -i 500
+  #+END_EXAMPLE
+  The performance data will be reported every 500 milliseconds.
+
+** Run the guest-client with more options
+
+   #+BEGIN_EXAMPLE
+    -h, --help            show this help message and exit
+    -p "program"          the program needs to run inside a VM, 
+                          example: -p "ls -al" 
+                         
+    -e [performance events]  
+                          choose which performance events to monitor 
+                          example: -e cache-misses cache-references
+                         
+    -i [ms]               set the monitoring interval in millisecond 
+                          example: -i 500 
+                         
+    --cpu {0,1,2}         choose which cpu to monitor, 0 is all cpus, default=0 
+                          example: --cpu 1
+                         
+    --host [IP_address]   set the host server IP address, default=192.168.122.1 
+                          example: --host 192.168.122.1
+                          
+    --port [Port]         Port of the computer running the server, default 9999 
+                          example: --port 9999
+
+   #+END_EXAMPLE
+
+
+
+-----
+* License
+
+#+BEGIN_HTML
+<pre class="example">
+Copyright 2015 SICS Swedish ICT AB
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    <a href=http://www.apache.org/licenses/LICENSE-2.0>http://www.apache.org/licenses/LICENSE-2.0</a>
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+</pre>
+#+END_HTML
+
+-----
