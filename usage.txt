@@ -41,7 +41,7 @@ This code has been developed in the context of the Yardstick OPNFV project (http
    The monitor has been developed and thoroughly tested for Ubuntu 14.04, kernel version 3.16.0 and 3.19.0, but it will probably work on the latest Linux versions and distributions. 
 
 ** Python version
-
+\
    The monitor runs in Python 2.7.
 
    The user must change the first line in the files server.py and guest_client.py if the path to your default Python installation does not match the one specified.
@@ -50,7 +50,7 @@ This code has been developed in the context of the Yardstick OPNFV project (http
    The host Linux machine needs to have the tool "perf" installed. It is available from Linux kernel version 2.6.31.
    In Ubuntu Linux, perf can be simply installed by running commands: 
    	  #+BEGIN_EXAMPLE
-      sudo apt-get install linux-tools-common
+      sudo apt-get install linux-tools
 
       sudo apt-get install linux-tools-`uname -r`
       #+END_EXAMPLE
@@ -133,7 +133,7 @@ This code has been developed in the context of the Yardstick OPNFV project (http
 
    #+BEGIN_EXAMPLE
     -h, --help            show this help message and exit
-    -p "program"          the program needs to run inside a VM, 
+    -p "program"          set the program needs to run inside a VM, 
                           example: -p "ls -al" 
                          
     -e [performance events]  
@@ -149,7 +149,7 @@ This code has been developed in the context of the Yardstick OPNFV project (http
     --host [IP_address]   set the host server IP address, default=192.168.122.1 
                           example: --host 192.168.122.1
                           
-    --port [Port]         Port of the computer running the server, default 9999 
+    --port [Port]         set the port number of the host server, default 9999 
                           example: --port 9999
 
    #+END_EXAMPLE
