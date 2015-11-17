@@ -39,7 +39,7 @@ def perf_parse():
                 )
 
         par.add_argument('-p', required=True, metavar='"program"', \
-            help='the program needs to monitor, \nexample: -p "ls -al" \n ')
+            help='set the program needs to monitor, \nexample: -p "ls -al" \n ')
         
         par.add_argument('-e', nargs='*', metavar='cache-misses cache-references cycles instructions branches branch-misses bus-cycles ref-cycles cpu-clock task-clock page-faults context-switches minor-faults major-faults alignment-faults emulation-faults dummy',\
             choices = ['cache-misses', 'cache-references', 'cycles', 'instructions', \
@@ -55,7 +55,7 @@ def perf_parse():
         par.add_argument('--host', default= '192.168.122.1', metavar='[IP_address]',\
             help = "set the host server IP address, default=192.168.122.1 \nexample: --host 192.168.122.1")
         par.add_argument('--port', nargs='?', default=9999, type=int, metavar='Port',\
-            help="Port of the computer running the server, default 9999 \nexample: --port 9999")
+            help="Set the port number of the server, default 9999 \nexample: --port 9999")
 
 
         arg = par.parse_args()
