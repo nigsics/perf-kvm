@@ -10,3 +10,6 @@ The perf-kvm is consists of two parts:
 The server builds a dictionary for each VM running on the host machine, which contains information such as Name, MAC,  PID and PIDs of the vCPUs of a VM. Guest VMs can issue performance monitoring requests to the server through a client software. The server will configure the tool “perf” to monitor the hardware performance of the requesting VM. Then, the server will send the performance data back to the requesting VM.
 
 For details on how to install and run the perf-kvm, please see usage.txt.
+
+####Acknowledgement:
+This code has been developed in the context of the Yardstick OPNFV project (https://wiki.opnfv.org/yardstick).
